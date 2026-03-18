@@ -41,7 +41,7 @@ for TF, gene, effect in interactions:
 # =========================================
 
 # Encabezado
-print("TF\tTotal genes\tActivados\tReprimidos\tTipo")
+print("TF\tTotal genes\tActivados\tReprimidos\tTipo\tLista de genes")
 
 for TF in sorted(regulon):
     
