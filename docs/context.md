@@ -1,4 +1,4 @@
-# Context
+## Context
 
 Este proyecto analiza una red de regulación genética.
 
@@ -36,4 +36,12 @@ Ejemplo de salida:
 TF	Total genes	Activados	Reprimidos	Tipo	Genes
 AraC	2	1	1	dual	araA, araB
 ```
-  
+
+
+## Actualización v1.1
+
+1. Leer los datos desde un archivo
+   1. El archivo trae 7 columnas, y la que vamos a usar son: 
+2. Los resultados deberan mandarse a un archivo de salida
+
+

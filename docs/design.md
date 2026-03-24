@@ -19,3 +19,14 @@
     - `activador` si sólo hay activaciones
     - `represor` si sólo hay represiones
   - Imprimir: TF, total, activados, reprimidos, tipo, lista de genes
+
+
+## Actualizacion 1.1
+
+- Leer los datos desde un archivo
+  - recorrer líneas
+  - limpiar datos
+  - validar
+  - extraer información
+  - construir interactions
+generar salida a un archivo

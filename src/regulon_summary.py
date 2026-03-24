@@ -1,14 +1,50 @@
-# =========================
-# Datos de entrada (ejemplo)
-# =========================
+import os
 
-interactions = [
-    ("AraC", "araA", "+"),
-    ("AraC", "araB", "-"),
-    ("LexA", "recA", "-"),
-    ("CRP", "lacZ", "+"),
-    ("CRP", "lacY", "+")
-]
+# =========================================
+# Lectura del archivo y construcción de interactions
+# =========================================
+
+interactions = []
+
+filename = "data/raw/NetworkRegulatorGene.tsv"
+
+if not os.path.exists(filename):
+    print("Error: archivo no encontrado")
+    exit(1)
+else:
+    with open(filename) as f:        
+        for line in f:
+            
+            line = line.strip()
+
+            # Ignorar líneas vacías
+            if not line:
+                continue
+
+            # Ignorar comentarios
+            if line.startswith("#"):
+                continue
+
+            # Ignorar encabezado
+            if line.startswith("1)regulatorId"):
+                continue
+            
+            fields = line.split("\t")
+
+            # Validar número mínimo de columnas
+            if len(fields) <= 6:
+                continue
+                        
+            TF = fields[1]
+            gene = fields[4]
+            effect = fields[5]
+
+            # Validar effect
+            if effect not in ["+", "-"]:
+                continue
+
+            interactions.append((TF, gene, effect))
+
 
 # =========================================
 # Construcción del regulon con información extra
@@ -40,26 +76,27 @@ for TF, gene, effect in interactions:
 # Generación de la salida
 # =========================================
 
-# Encabezado
-print("TF\tTotal genes\tActivados\tReprimidos\tTipo\tLista de genes")
+output_file = "results/regulon_summary.tsv"
+os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
-for TF in sorted(regulon):
-    
-    # Obtener datos
-    genes = sorted(regulon[TF]["genes"])
-    total = len(genes)
-    activados = regulon[TF]["activados"]
-    reprimidos = regulon[TF]["reprimidos"]
+with open(output_file, "w") as out:
+    out.write("TF\tTotal genes\tActivados\tReprimidos\tTipo\tLista de genes\n")
 
-    # Determinar tipo de regulación
-    if activados > 0 and reprimidos > 0:
-        tipo = "dual"
-    elif activados > 0:
-        tipo = "activador"
-    else:
-        tipo = "represor"
+    for TF in sorted(regulon):
+        
+        # Obtener datos
+        genes = sorted(regulon[TF]["genes"])
+        total = len(genes)
+        activados = regulon[TF]["activados"]
+        reprimidos = regulon[TF]["reprimidos"]
 
-    lista_genes = ", ".join(genes)
+        # Determinar tipo de regulación
+        if activados > 0 and reprimidos > 0:
+            tipo = "dual"
+        elif activados > 0:
+            tipo = "activador"
+        else:
+            tipo = "represor"
 
-    # imprimir resultado
-    print(TF, total, activados, reprimidos, tipo, lista_genes, sep="\t")
+        lista_genes = ", ".join(genes)
+        out.write(f"{TF}\t{total}\t{activados}\t{reprimidos}\t{tipo}\t{lista_genes}\n")
