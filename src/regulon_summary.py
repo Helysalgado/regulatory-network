@@ -40,7 +40,7 @@ else:
             effect = fields[5]
 
             # Validar effect
-            if effect not in ["+", "-"]:
+            if effect not in ["+", "-","+-"]:
                 continue
 
             interactions.append((TF, gene, effect))
@@ -70,6 +70,9 @@ for TF, gene, effect in interactions:
         regulon[TF]["activados"] += 1
     elif effect == "-":
         regulon[TF]["reprimidos"] += 1
+    elif effect == "+-":
+        regulon[TF]["activados"] += 1
+        regulon[TF]["reprimidos"] += 1  
 
 
 # =========================================
