@@ -21,7 +21,7 @@
   - Imprimir: TF, total, activados, reprimidos, tipo, lista de genes
 
 
-## Actualizacion 1.1
+## Actualizacion v1.1
 
 - Leer los datos desde un archivo
   - recorrer líneas
@@ -30,3 +30,11 @@
   - extraer información
   - construir interactions
 generar salida a un archivo
+
+## Actualización v1.2
+El programa recibirá 2 argumentos desde la linea de comandos
+
+Flujo:
+
+usuario --> CLI --> main() --> funciones
+

@@ -45,3 +45,11 @@ AraC	2	1	1	dual	araA, araB
 2. Los resultados deberan mandarse a un archivo de salida
 
 
+## Actualización v1.2
+Problema:
+El programa depende de rutas fijas (hardcoded)
+
+Nuevo requisito:
+El programa debe recibir 2 argumentos, el archivo de entrada y el archivo de salida
+
+

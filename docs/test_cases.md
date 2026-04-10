@@ -165,3 +165,20 @@ Las columnas cambian de posición.
 
 * Falla si depende de índices
 * Funciona si usa nombres de columnas
+
+
+## Command Line Interface (CLI)
+Caso: Correr el programa con paso de argumentos
+
+Entrada:
+
+```bash
+uv run python regulon_summary.py input.txt output.txt
+uv run python regulon_summary.py NetworkRegulatorGene.tsv  tf_summary.txt
+```
+
+Resultado:
+El programa lea el archivo de entrada y genere el resultado con el nombre que se le paso como argumento.
+
+
+

@@ -10,6 +10,7 @@ import os
 # Salida: lista de interacciones (TF, gen, efecto).
 # =========================================
 
+
 def load_interactions(filename):
     """Carga las interacciones desde un archivo TSV.
 
@@ -21,9 +22,9 @@ def load_interactions(filename):
     """
     interactions = []
 
-    with open(filename) as f:        
+    with open(filename) as f:
         for line in f:
-            
+
             line = line.strip()
 
             # Ignorar líneas vacías
@@ -37,25 +38,24 @@ def load_interactions(filename):
             # Ignorar encabezado
             if line.startswith("1)regulatorId"):
                 continue
-            
+
             fields = line.split("\t")
 
             # Validar número mínimo de columnas
             if len(fields) <= 6:
                 continue
-                        
+
             TF = fields[1]
             gene = fields[4]
             effect = fields[5]
 
             # Validar effect
-            if effect not in ["+", "-","+-"]:
+            if effect not in ["+", "-", "+-"]:
                 continue
 
             interactions.append((TF, gene, effect))
 
     return interactions
-
 
 
 # =========================================
@@ -67,6 +67,7 @@ def load_interactions(filename):
 # Entrada: lista de interacciones (TF, gen, efecto).
 # Salida: diccionario con clave TF y valores
 # =========================================
+
 
 def build_regulon(interactions):
     """Construye una estructura de datos que resume la información de cada TF.
@@ -80,14 +81,10 @@ def build_regulon(interactions):
     regulon = {}
 
     for TF, gene, effect in interactions:
-        
+
         # Inicializar estructura si el TF no existe
         if TF not in regulon:
-            regulon[TF] = {
-                "genes": [],
-                "activados": 0,
-                "reprimidos": 0
-            }
+            regulon[TF] = {"genes": [], "activados": 0, "reprimidos": 0}
 
         # Agregar gen a la lista
         regulon[TF]["genes"].append(gene)
@@ -104,16 +101,16 @@ def build_regulon(interactions):
     return regulon
 
 
-
 # =========================================
 # Generación de la salida
 # =========================================
 
 # =========================================
 # Responsabilidad: Generar un archivo de salida que resuma la información de cada TF, incluyendo el número total de genes regulados, el número de genes activados, el número de genes reprimidos, el tipo de regulación (activador, represor o dual) y la lista de genes regulados.
-# Entrada: diccionario con clave TF y valores 
+# Entrada: diccionario con clave TF y valores
 # Salida: archivo TSV con resumen de reguladores
 # =========================================
+
 
 def write_summary(regulon, output_file):
     """Escribe el resumen del regulon a un archivo TSV.
@@ -128,7 +125,7 @@ def write_summary(regulon, output_file):
         out.write("TF\tTotal genes\tActivados\tReprimidos\tTipo\tLista de genes\n")
 
         for TF in sorted(regulon):
-            
+
             # Obtener datos
             genes = sorted(regulon[TF]["genes"])
             total = len(genes)
@@ -144,11 +141,12 @@ def write_summary(regulon, output_file):
                 tipo = "represor"
 
             lista_genes = ", ".join(genes)
-            out.write(f"{TF}\t{total}\t{activados}\t{reprimidos}\t{tipo}\t{lista_genes}\n")
+            out.write(
+                f"{TF}\t{total}\t{activados}\t{reprimidos}\t{tipo}\t{lista_genes}\n"
+            )
 
 
 def main():
-
     """Función principal del programa."""
     filename = "data/raw/NetworkRegulatorGene.tsv"
     output_file = "results/regulon_summary.tsv"
@@ -165,6 +163,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
