@@ -180,5 +180,32 @@ uv run python regulon_summary.py NetworkRegulatorGene.tsv  tf_summary.txt
 Resultado:
 El programa lea el archivo de entrada y genere el resultado con el nombre que se le paso como argumento.
 
+## Actualización v1.3
+
+### Filtro por número mínimo de genes
+
+**Condición**
+Ejecutar el programa con `--min_genes 2` y datos que incluyen TFs con 1 y 2+ genes regulados.
+
+**Entrada de ejemplo:**
+
+```txt
+AraC araA +
+LexA recA -
+LexA recB -
+```
+
+**Comando:**
+
+```bash
+python regulon_summary.py --min_genes 2 input.tsv output.tsv
+```
+
+**Resultado esperado**
+
+- Solo se incluyen TFs con al menos 2 genes en la salida.
+- En el ejemplo, `AraC` (1 gen) se excluye, `LexA` (2 genes) se incluye.
+- Salida filtrada correcta en formato TSV.
+
 
 

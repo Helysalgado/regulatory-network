@@ -52,4 +52,12 @@ El programa depende de rutas fijas (hardcoded)
 Nuevo requisito:
 El programa debe recibir 2 argumentos, el archivo de entrada y el archivo de salida
 
+## Actualización v1.3
+
+Problema:
+La salida incluye todos los factores de transcripción (TF), independientemente del número de genes que regulan, lo que puede generar resultados extensos con TFs poco relevantes.
+
+Nuevo requisito:
+Agregar un argumento `--min_genes` que permita filtrar los resultados para incluir únicamente TFs que regulan al menos el número especificado de genes, facilitando el análisis de reguladores más activos.
+
 

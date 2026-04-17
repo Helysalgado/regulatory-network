@@ -38,3 +38,11 @@ Flujo:
 
 usuario --> CLI --> main() --> funciones
 
+## Actualización v1.3
+
+Implementación del filtro `--min_genes`:
+
+- Agregar el argumento `--min_genes` en el parser de argumentos CLI, con valor por defecto 0 (sin filtro).
+- En la función `write_summary()`, antes de iterar sobre los TFs, filtrar el diccionario `regulon` para incluir solo aquellos TFs donde `len(regulon[tf]["genes"]) >= min_genes`.
+- Mantener el resto del algoritmo sin cambios, asegurando que la salida sea consistente con el filtrado aplicado.
+

@@ -1,4 +1,5 @@
 import os
+import argparse
 
 # =========================================
 # Lectura del archivo y construcción de interactions
@@ -12,7 +13,8 @@ import os
 
 
 def load_interactions(filename):
-    """Carga las interacciones desde un archivo TSV.
+    """
+    Carga las interacciones desde un archivo TSV.
 
     Args:
         filename (str): Ruta del archivo de interacciones.
@@ -146,18 +148,69 @@ def write_summary(regulon, output_file):
             )
 
 
+# =========================================
+# Lectura de argumentos
+# =========================================
+
+
+def parse_arguments():
+    """Define y lee los argumentos de línea de comandos."""
+
+    parser = argparse.ArgumentParser(
+        description="Genera un resumen de regulones a partir de un archivo TSV"
+    )
+
+    # Argumentos obligatorios (posicionales)
+    parser.add_argument("input_file", help="Archivo de entrada con interacciones")
+
+    parser.add_argument("output_file", help="Archivo de salida para el resumen")
+
+    # Argumento opcional
+    parser.add_argument(
+        "--min_genes",
+        type=int,
+        default=0,
+        help="Filtrar TFs con al menos este número de genes",
+    )
+
+    return parser.parse_args()
+
+
+# =========================================
+# Main
+# =========================================
+
+
 def main():
     """Función principal del programa."""
-    filename = "data/raw/NetworkRegulatorGene.tsv"
-    output_file = "results/regulon_summary.tsv"
 
-    # Cargar interacciones
-    interactions = load_interactions(filename)
+    # Leer argumentos
+    args = parse_arguments()
 
-    # Construir regulon
+    input_file = args.input_file
+    output_file = args.output_file
+    min_genes = args.min_genes
+
+    # Validación
+    if not os.path.exists(input_file):
+        print(f"Error: el archivo no existe -> {input_file}")
+        exit(1)
+
+    # Pipeline
+    interactions = load_interactions(input_file)
     regulon = build_regulon(interactions)
 
-    # Escribir resumen
+    nuevo_regulon = {}
+
+    for TF, data in regulon.items():
+
+        num_genes = len(data["genes"])
+
+        if num_genes >= min_genes:
+            nuevo_regulon[TF] = data
+
+    regulon = nuevo_regulon
+
     write_summary(regulon, output_file)
 
 
