@@ -207,5 +207,115 @@ python regulon_summary.py --min_genes 2 input.tsv output.tsv
 - En el ejemplo, `AraC` (1 gen) se excluye, `LexA` (2 genes) se incluye.
 - Salida filtrada correcta en formato TSV.
 
+## Actualización v1.4
+
+### Archivo de entrada inexistente
+
+**Descripción**  
+El archivo de entrada especificado no existe en el sistema de archivos.
+
+**Entrada**  
+Comando: `python main.py nonexistent_file.txt output.txt`  
+Archivo: nonexistent_file.txt (no existe)
+
+**Comportamiento esperado**  
+El programa termina con código de error, mostrando un mensaje claro indicando que el archivo de entrada no se encuentra.
+
+---
+
+### Sin permisos de lectura
+
+**Descripción**  
+El archivo de entrada existe pero no tiene permisos de lectura para el usuario.
+
+**Entrada**  
+Comando: `python main.py protected_file.txt output.txt`  
+Archivo: protected_file.txt (sin permisos de lectura)
+
+**Comportamiento esperado**  
+El programa termina con código de error, mostrando un mensaje indicando falta de permisos para leer el archivo.
+
+---
+
+### Error en escritura (permiso o directorio)
+
+**Descripción**  
+No se puede escribir en el archivo de salida debido a permisos insuficientes o directorio inexistente.
+
+**Entrada**  
+Comando: `python main.py input.txt /protected/output.txt`  
+Archivo de entrada: válido  
+Directorio de salida: sin permisos de escritura
+
+**Comportamiento esperado**  
+El programa termina con código de error, mostrando un mensaje indicando que no se puede escribir en el archivo de salida.
+
+---
+
+### `--min_genes` negativo
+
+**Descripción**  
+El parámetro `--min_genes` recibe un valor negativo.
+
+**Entrada**  
+Comando: `python main.py input.txt output.txt --min_genes -1`  
+Archivo de entrada: válido
+
+**Comportamiento esperado**  
+El programa termina con código de error, mostrando un mensaje indicando que `--min_genes` debe ser un número positivo o cero.
+
+---
+
+### Archivo válido pero sin interacciones
+
+**Descripción**  
+El archivo de entrada existe y tiene formato correcto, pero no contiene interacciones válidas (solo encabezados o líneas vacías).
+
+**Entrada**  
+Archivo input.txt:  
+```txt
+TF	gene	effect
+```
+
+Comando: `python main.py input.txt output.txt`
+
+**Comportamiento esperado**  
+El programa procesa sin errores, genera un archivo de salida vacío o con encabezado, y muestra una advertencia indicando que no se encontraron interacciones válidas.
+
+---
+
+### Filtro que deja el regulon vacío
+
+**Descripción**  
+El filtro `--min_genes` es mayor que el número máximo de genes regulados por cualquier TF, dejando el resultado vacío.
+
+**Entrada**  
+Archivo input.txt con datos válidos pero pocos genes por TF.  
+Comando: `python main.py input.txt output.txt --min_genes 10` (valor alto)
+
+**Comportamiento esperado**  
+El programa procesa sin errores, genera un archivo de salida vacío o con solo encabezado, y muestra una advertencia indicando que ningún TF cumple el criterio de filtro.
+
+---
+
+### Registros inválidos en el archivo
+
+**Descripción**  
+El archivo contiene registros con formato incorrecto (columnas insuficientes, valores inválidos).
+
+**Entrada**  
+Archivo input.txt:  
+```txt
+TF	gene	effect
+AraC	araA	+
+invalid_line
+AraC	araB	-
+```
+
+Comando: `python main.py input.txt output.txt`
+
+**Comportamiento esperado**  
+El programa procesa las líneas válidas, descarta las inválidas, genera salida con los datos correctos, y muestra advertencias para los registros descartados.
+
 
 

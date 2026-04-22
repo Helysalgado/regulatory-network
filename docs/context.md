@@ -60,4 +60,12 @@ La salida incluye todos los factores de transcripción (TF), independientemente 
 Nuevo requisito:
 Agregar un argumento `--min_genes` que permita filtrar los resultados para incluir únicamente TFs que regulan al menos el número especificado de genes, facilitando el análisis de reguladores más activos.
 
+## Actualización v1.4
+
+Problema:
+El programa carece de validaciones robustas y manejo de errores, lo que puede causar fallos inesperados o resultados incorrectos al procesar archivos de entrada/salida o parámetros inválidos.
+
+Nuevo requisito:
+Implementar validación del parámetro `--min_genes`, manejo de errores de lectura (archivo inexistente, permisos, etc.) y escritura de archivos, distinción entre error, advertencia y resultado vacío, descarte de registros inválidos, eliminación de duplicados, y centralización del manejo de excepciones en la función `main()`.
+
 
