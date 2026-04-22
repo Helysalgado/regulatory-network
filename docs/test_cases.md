@@ -296,6 +296,27 @@ Comando: `python main.py input.txt output.txt --min_genes 10` (valor alto)
 **Comportamiento esperado**  
 El programa procesa sin errores, genera un archivo de salida vacío o con solo encabezado, y muestra una advertencia indicando que ningún TF cumple el criterio de filtro.
 
+## Actualización v1.5
+
+### Genes duplicados en interacciones
+
+**Descripción**  
+El archivo contiene múltiples interacciones para el mismo gen con el mismo TF, lo que antes causaba duplicados en la lista de genes y totales inflados.
+
+**Entrada**  
+Archivo input.txt:  
+```txt
+TF	gene	effect
+AraC	araA	+
+AraC	araA	+
+AraC	araB	-
+```
+
+Comando: `python main.py input.txt output.txt`
+
+**Comportamiento esperado**  
+El programa procesa las interacciones, elimina duplicados de genes, genera salida con genes únicos (araA, araB), total de genes = 2, activados = 1, reprimidos = 1, tipo = dual, y lista sin duplicados.
+
 ---
 
 ### Registros inválidos en el archivo

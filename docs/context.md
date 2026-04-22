@@ -68,4 +68,12 @@ El programa carece de validaciones robustas y manejo de errores, lo que puede ca
 Nuevo requisito:
 Implementar validación del parámetro `--min_genes`, manejo de errores de lectura (archivo inexistente, permisos, etc.) y escritura de archivos, distinción entre error, advertencia y resultado vacío, descarte de registros inválidos, eliminación de duplicados, y centralización del manejo de excepciones en la función `main()`.
 
+## Actualización v1.5
+
+Problema:
+El programa contaba interacciones repetidas en lugar de genes únicos, lo que generaba totales inflados y listas de genes con duplicados en la salida.
+
+Nuevo requisito:
+Utilizar conjuntos (sets) en lugar de listas para almacenar genes, activados y reprimidos, asegurando que los totales se basen en genes únicos regulados y eliminando duplicados en la lista de salida.
+
 

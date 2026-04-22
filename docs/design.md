@@ -72,3 +72,15 @@ Los errores se propagan desde las funciones de bajo nivel hacia `main()`, permit
 
 Las funciones auxiliares se encargan exclusivamente de la lógica de negocio y validación, delegando el manejo de excepciones a `main()`. Esto mantiene el código modular: las funciones retornan resultados válidos o lanzan excepciones claras, sin preocuparse por la presentación de errores o la interacción con el usuario. `main()` actúa como coordinador, manejando la CLI, invocando funciones y traduciendo excepciones en mensajes apropiados, asegurando que la interfaz del programa sea consistente y amigable.
 
+## Actualización v1.5
+
+### Uso de Conjuntos para Genes Únicos
+
+Se modifica la estructura de datos en `build_regulon()` para utilizar conjuntos (`set`) en lugar de listas y contadores simples. Los campos `genes`, `activados` y `reprimidos` ahora son conjuntos que almacenan genes únicos, eliminando duplicados automáticamente. Esto asegura que:
+
+- El total de genes regulados se calcula como `len(genes)`, representando genes únicos.
+- Los contadores de activados y reprimidos se basan en genes únicos con cada tipo de efecto, no en interacciones repetidas.
+- La lista de salida incluye genes únicos ordenados, sin repeticiones.
+
+Esta decisión mejora la precisión del análisis al enfocarse en genes regulados únicos en lugar de contar interacciones múltiples, manteniendo la eficiencia computacional con operaciones de conjunto.
+

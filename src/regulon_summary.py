@@ -59,7 +59,7 @@ def load_interactions(filename):
 
 
 # =========================================
-# Responsabilidad: Construir una estructura de datos que resuma la información de cada TF, incluyendo el número total de genes regulados, el número de genes activados, el número de genes reprimidos y la lista de genes regulados.
+# Responsabilidad: Construir una estructura de datos que resuma la información de cada TF, incluyendo el número total de genes regulados únicos, genes activados únicos, genes reprimidos únicos y la lista de genes regulados.
 # Entrada: lista de interacciones (TF, gen, efecto).
 # Salida: diccionario con clave TF y valores
 # =========================================
@@ -70,7 +70,8 @@ def build_regulon(interactions):
         interactions (list[tuple[str, str, str]]): Lista de interacciones (TF, gen, efecto).
 
     Returns:
-        dict: Diccionario con clave TF y valores con genes, activados y reprimidos.
+        dict: Diccionario con clave TF y valores que contienen conjuntos de genes únicos,
+            genes activados únicos y genes reprimidos únicos.
     """
     regulon = {}
 
@@ -78,25 +79,25 @@ def build_regulon(interactions):
 
         # Inicializar estructura si el TF no existe
         if TF not in regulon:
-            regulon[TF] = {"genes": [], "activados": 0, "reprimidos": 0}
+            regulon[TF] = {"genes": set(), "activados": set(), "reprimidos": set()}
 
-        # Agregar gen a la lista
-        regulon[TF]["genes"].append(gene)
+        # Agregar gen a los conjuntos para evitar duplicados
+        regulon[TF]["genes"].add(gene)
 
-        # Contar tipo de regulación
+        # Contar tipo de regulación por gen único
         if effect == "+":
-            regulon[TF]["activados"] += 1
+            regulon[TF]["activados"].add(gene)
         elif effect == "-":
-            regulon[TF]["reprimidos"] += 1
+            regulon[TF]["reprimidos"].add(gene)
         elif effect == "+-":
-            regulon[TF]["activados"] += 1
-            regulon[TF]["reprimidos"] += 1
+            regulon[TF]["activados"].add(gene)
+            regulon[TF]["reprimidos"].add(gene)
 
     return regulon
 
 
 # =========================================
-# Responsabilidad: Generar un archivo de salida que resuma la información de cada TF, incluyendo el número total de genes regulados, el número de genes activados, el número de genes reprimidos, el tipo de regulación (activador, represor o dual) y la lista de genes regulados.
+# Responsabilidad: Generar un archivo de salida que resuma la información de cada TF, incluyendo el número total de genes regulados únicos, el número de genes activados únicos, el número de genes reprimidos únicos, el tipo de regulación (activador, represor o dual) y la lista de genes regulados.
 # Entrada: diccionario con clave TF y valores
 # Salida: archivo TSV con resumen de reguladores
 # =========================================
@@ -106,6 +107,9 @@ def write_summary(regulon, output_file):
     Args:
         regulon (dict): Diccionario con información del regulon.
         output_file (str): Ruta del archivo de salida.
+
+    Notes:
+        Calcula los totales de activados y reprimidos a partir de conjuntos de genes únicos.
     """
 
     if not output_file:
@@ -124,8 +128,8 @@ def write_summary(regulon, output_file):
             # Obtener datos
             genes = sorted(regulon[TF]["genes"])
             total = len(genes)
-            activados = regulon[TF]["activados"]
-            reprimidos = regulon[TF]["reprimidos"]
+            activados = len(regulon[TF]["activados"])
+            reprimidos = len(regulon[TF]["reprimidos"])
 
             # Determinar tipo de regulación
             if activados > 0 and reprimidos > 0:
