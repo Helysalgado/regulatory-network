@@ -1,4 +1,4 @@
-TF	Total genes	Genes Activados	Genes Reprimidos	Tipo de TF	Lista de genes
+TF	Total genes	Activados	Reprimidos	Tipo	Lista de genes
 AcrR	15	0	15	represor	acrA, acrB, acrR, flhC, flhD, marA, marB, marR, mdtI, mdtJ, mdtU, micF, puuA, soxR, soxS
 AdiY	8	8	0	activador	adiA, gadA, gadB, gadC, gadX, gltB, gltD, gltF
 AgaR	11	0	11	represor	agaA, agaB, agaC, agaD, agaI, agaR, agaS, agaV, agaW, kbaY, kbaZ

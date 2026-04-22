@@ -19,6 +19,9 @@ def load_interactions(filename):
     """
     interactions = []
 
+    if not filename:
+        raise ValueError("filename vacío")
+
     with open(filename) as f:
         for line in f:
 
@@ -104,6 +107,13 @@ def write_summary(regulon, output_file):
         regulon (dict): Diccionario con información del regulon.
         output_file (str): Ruta del archivo de salida.
     """
+
+    if not output_file:
+        raise ValueError("output_file vacío")
+
+    if regulon is None:
+        raise ValueError("regulon no puede ser None")
+
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
     with open(output_file, "w") as out:
@@ -163,26 +173,57 @@ def parse_arguments():
 def main():
     """Función principal del programa."""
 
-    # Leer argumentos
+    # =========================================
+    # 1. Lectura de argumentos
+    # =========================================
     args = parse_arguments()
 
     input_file = args.input_file
     output_file = args.output_file
     min_genes = args.min_genes
 
-    # Validación
-    if not os.path.exists(input_file):
-        print(f"Error: el archivo no existe -> {input_file}")
+    # =========================================
+    # 2. Validación de argumentos (errores predecibles)
+    # =========================================
+    if min_genes < 0:
+        print("Error: min_genes debe ser mayor o igual a 0.")
         exit(1)
 
-    # Pipeline
-    interactions = load_interactions(input_file)
+    # =========================================
+    # 3. Lectura de datos (puede fallar → try/except)
+    # =========================================
+    try:
+        interactions = load_interactions(input_file)
+
+    except FileNotFoundError:
+        print(f"Error: no existe el archivo de entrada -> {input_file}")
+        exit(1)
+
+    except PermissionError:
+        print(f"Error: no hay permisos para leer el archivo -> {input_file}")
+        exit(1)
+
+    except OSError as e:
+        print(f"Error al leer el archivo ({input_file}): {e}")
+        exit(1)
+
+    # =========================================
+    # 4. Validación de contenido (no error crítico)
+    # =========================================
+    if not interactions:
+        print("Advertencia: no se encontraron interacciones válidas.")
+
+    # =========================================
+    # 5. Construcción del regulon
+    # =========================================
     regulon = build_regulon(interactions)
 
+    # =========================================
+    # 6. Filtrado por número de genes
+    # =========================================
     nuevo_regulon = {}
 
     for TF, data in regulon.items():
-
         num_genes = len(data["genes"])
 
         if num_genes >= min_genes:
@@ -190,7 +231,29 @@ def main():
 
     regulon = nuevo_regulon
 
-    write_summary(regulon, output_file)
+    # =========================================
+    # 7. Resultado vacío (caso válido)
+    # =========================================
+    if not regulon:
+        print("Advertencia: no hay reguladores que cumplan el filtro.")
+
+    # =========================================
+    # 8. Escritura de resultados (puede fallar)
+    # =========================================
+    try:
+        write_summary(regulon, output_file)
+
+    except PermissionError:
+        print(f"Error: no hay permisos para escribir -> {output_file}")
+        exit(1)
+
+    except IsADirectoryError:
+        print(f"Error: la ruta de salida es un directorio -> {output_file}")
+        exit(1)
+
+    except OSError as e:
+        print(f"Error al escribir el archivo ({output_file}): {e}")
+        exit(1)
 
 
 if __name__ == "__main__":
