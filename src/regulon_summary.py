@@ -1,17 +1,12 @@
 import os
 import argparse
 
-# =========================================
-# Lectura del archivo y construcción de interactions
-# =========================================
 
 # =========================================
 # Responsabilidad: Leer el archivo de interacciones y construir una estructura de datos que contenga la información relevante para cada TF.
 # Entrada: Archivo TSV con interacciones entre reguladores y genes.
 # Salida: lista de interacciones (TF, gen, efecto).
 # =========================================
-
-
 def load_interactions(filename):
     """
     Carga las interacciones desde un archivo TSV.
@@ -61,16 +56,10 @@ def load_interactions(filename):
 
 
 # =========================================
-# Construcción del regulon con información extra
-# =========================================
-
-# =========================================
 # Responsabilidad: Construir una estructura de datos que resuma la información de cada TF, incluyendo el número total de genes regulados, el número de genes activados, el número de genes reprimidos y la lista de genes regulados.
 # Entrada: lista de interacciones (TF, gen, efecto).
 # Salida: diccionario con clave TF y valores
 # =========================================
-
-
 def build_regulon(interactions):
     """Construye una estructura de datos que resume la información de cada TF.
 
@@ -104,16 +93,10 @@ def build_regulon(interactions):
 
 
 # =========================================
-# Generación de la salida
-# =========================================
-
-# =========================================
 # Responsabilidad: Generar un archivo de salida que resuma la información de cada TF, incluyendo el número total de genes regulados, el número de genes activados, el número de genes reprimidos, el tipo de regulación (activador, represor o dual) y la lista de genes regulados.
 # Entrada: diccionario con clave TF y valores
 # Salida: archivo TSV con resumen de reguladores
 # =========================================
-
-
 def write_summary(regulon, output_file):
     """Escribe el resumen del regulon a un archivo TSV.
 
@@ -151,8 +134,6 @@ def write_summary(regulon, output_file):
 # =========================================
 # Lectura de argumentos
 # =========================================
-
-
 def parse_arguments():
     """Define y lee los argumentos de línea de comandos."""
 
@@ -179,8 +160,6 @@ def parse_arguments():
 # =========================================
 # Main
 # =========================================
-
-
 def main():
     """Función principal del programa."""
 
